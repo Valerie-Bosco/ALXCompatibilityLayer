@@ -1,6 +1,12 @@
+from enum import Enum
+
 import bpy
 
-from VersionUtils import get_version
+from .VersionUtils import get_version
+
+
+class NodeGroupInput_Subtype(Enum):
+    FACTOR = "Factor" if get_version() == [3, 6] else "FACTOR"
 
 
 def clear_node_tree(node_tree: bpy.types.NodeTree):
@@ -12,7 +18,7 @@ def clear_node_tree(node_tree: bpy.types.NodeTree):
             node_tree.interface.clear()
 
 
-def NG_new_input(node_group, name: str, socket_type: str):
+def NG_IO_new_input(node_group, name: str, socket_type: str):
     match get_version():
         case [3, 6]:
             return node_group.inputs.new(socket_type, name)
@@ -22,11 +28,19 @@ def NG_new_input(node_group, name: str, socket_type: str):
             )
 
 
-def NG_new_output(node_group, name: str, socket_type: str):
+def NG_IO_new_output(node_group, name: str, socket_type: str):
     match get_version():
         case [3, 6]:
-            return node_group.inputs.new(socket_type, name)
+            return node_group.outputs.new(socket_type, name)
         case _:
             return node_group.interface.new_socket(
                 name, in_out="OUTPUT", socket_type=socket_type
             )
+
+
+def NG_IO_set_subtype(nodegroup_socket, subtype: NodeGroupInput_Subtype):
+    match get_version():
+        case [3, 6]:
+            nodegroup_socket.bl_subtype_label = subtype
+        case _:
+            nodegroup_socket.subtype = subtype
