@@ -9,7 +9,7 @@ class NodeGroupInput_Subtype(Enum):
     FACTOR = "Factor" if get_version() == [3, 6] else "FACTOR"
 
 
-def clear_node_tree(node_tree: bpy.types.NodeTree):
+def NT_clear_node_tree(node_tree: bpy.types.NodeTree):
     match get_version():
         case [3, 6]:
             node_tree.inputs.clear()
