@@ -1,21 +1,15 @@
-from enum import Enum
-
 import bpy
 
 from .VersionUtils import get_version
 
 
-class NodeGroupInput_Subtype(Enum):
-    @property
-    def Factor(self):
-        return "Factor" if get_version() == [3, 6] else "FACTOR"
+class NodeGroupInput_Subtype:
+    Factor = "Factor" if get_version() == [3, 6] else "FACTOR"
 
 
 class PrincipledBSDF:
-    class Inputs(Enum):
-        @property
-        def Emission(self):
-            return "Emission" if get_version() == [3, 6] else "Emission Color"
+    class Inputs:
+        Emission = "Emission" if get_version() == [3, 6] else "Emission Color"
 
 
 def NT_clear_node_tree(node_tree: bpy.types.NodeTree):
@@ -51,6 +45,6 @@ def NG_IO_set_subtype(nodegroup_socket, subtype: property):
     """subtype: class<NodeGroupInput_Subtype>"""
     match get_version():
         case [3, 6]:
-            nodegroup_socket.bl_subtype_label = str(subtype.value)
+            nodegroup_socket.bl_subtype_label = subtype
         case _:
-            nodegroup_socket.subtype = str(subtype.value)
+            nodegroup_socket.subtype = subtype
