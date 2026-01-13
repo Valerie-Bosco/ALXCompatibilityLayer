@@ -1,20 +1,20 @@
 import bpy
 
-from .VersionUtils import get_version
+from .VersionUtils import get_version, is_version
 
 
 class NodeGroupInput_Subtype:
-    Factor = "Factor" if get_version() == [3, 6] else "FACTOR"
+    Factor = "Factor" if is_version(3, 6) else "FACTOR"
 
 
 class PrincipledBSDF:
     class Inputs:
-        Emission = "Emission" if get_version() == [3, 6] else "Emission Color"
+        Emission = "Emission" if is_version(3, 6) else "Emission Color"
 
 
 def NT_clear_node_tree(node_tree: bpy.types.NodeTree):
     match get_version():
-        case [3, 6]:
+        case (3, 6):
             node_tree.inputs.clear()
             node_tree.outputs.clear()
         case _:
@@ -23,7 +23,7 @@ def NT_clear_node_tree(node_tree: bpy.types.NodeTree):
 
 def NG_IO_new_input(node_group, name: str, socket_type: str):
     match get_version():
-        case [3, 6]:
+        case (3, 6):
             return node_group.inputs.new(socket_type, name)
         case _:
             return node_group.interface.new_socket(
@@ -33,7 +33,7 @@ def NG_IO_new_input(node_group, name: str, socket_type: str):
 
 def NG_IO_new_output(node_group, name: str, socket_type: str):
     match get_version():
-        case [3, 6]:
+        case (3, 6):
             return node_group.outputs.new(socket_type, name)
         case _:
             return node_group.interface.new_socket(
@@ -44,7 +44,7 @@ def NG_IO_new_output(node_group, name: str, socket_type: str):
 def NG_IO_set_subtype(nodegroup_socket, subtype: property):
     """subtype: class<NodeGroupInput_Subtype>"""
     match get_version():
-        case [3, 6]:
+        case (3, 6):
             nodegroup_socket.bl_subtype_label = subtype
         case _:
             nodegroup_socket.subtype = subtype
