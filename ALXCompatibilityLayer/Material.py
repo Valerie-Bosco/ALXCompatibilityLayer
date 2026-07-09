@@ -12,13 +12,15 @@ class PrincipledBSDF:
         Emission = "Emission" if is_version(3, 6) else "Emission Color"
 
 
-def NT_clear_node_tree(node_tree: bpy.types.NodeTree):
-    match get_version():
-        case (3, 6):
-            node_tree.inputs.clear()
-            node_tree.outputs.clear()
-        case _:
-            node_tree.interface.clear()
+def NT_clear_node_tree(node_tree: bpy.types.NodeTree) -> None:
+    if node_tree is not None:
+        match get_version():
+            case (3, 6):
+                node_tree.inputs.clear()
+                node_tree.outputs.clear()
+            case _:
+                if (interface :=node_tree.interface) is not None:
+                    interface.clear()
 
 
 def NG_IO_new_input(node_group, name: str, socket_type: str):
