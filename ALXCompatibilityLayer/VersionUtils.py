@@ -13,7 +13,7 @@ def lessthan_version(version: tuple[int, int]) -> bool:
     bl_version = get_version()
 
     return (bl_version[0] == version[0] and bl_version[1] < version[1]) or (
-            bl_version[0] < version[0]
+        bl_version[0] < version[0]
     )
 
 
@@ -21,5 +21,5 @@ def lessthanequal_version(version: tuple[int, int]) -> bool:
     bl_version = get_version()
 
     return (bl_version[0] == version[0] and bl_version[1] <= version[1]) or (
-            bl_version[0] <= version[0]
+        bl_version[0] <= version[0]
     )
